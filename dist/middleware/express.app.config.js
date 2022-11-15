@@ -20,8 +20,8 @@ class ExpressAppConfig {
         // Create new express app only if not passed by options
         this.app = appOptions.app || express();
         this.app.use(cors(appOptions.cors));
-        const spec = appOptions.swaggerDoc ? '' : fs.readFileSync(definitionPath, 'utf8');
-        const swaggerDoc = appOptions.swaggerDoc ? appOptions.swaggerDoc : jsyaml.safeLoad(spec);
+        const spec = fs.readFileSync(definitionPath, 'utf8');
+        const swaggerDoc = jsyaml.safeLoad(spec);
         this.app.use(bodyParser.urlencoded());
         this.app.use(bodyParser.text());
         this.app.use(bodyParser.json());
