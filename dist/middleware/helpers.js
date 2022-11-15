@@ -32,7 +32,7 @@ function debugError(err, debug) {
     if (err.failedValidation === true) {
         if (err.results) {
             debug('  Errors:');
-            (0, lodash_1.each)(err.results.errors, function (error, index) {
+            lodash_1.each(err.results.errors, function (error, index) {
                 debug('    %d:', index);
                 debug('      code: %s', error.code);
                 debug('      message: %s', error.message);
@@ -42,7 +42,7 @@ function debugError(err, debug) {
     }
     if (err.stack) {
         debug('  Stack:');
-        (0, lodash_1.each)(err.stack.split('\n'), function (line, index) {
+        lodash_1.each(err.stack.split('\n'), function (line, index) {
             // Skip the first line since it's in the reasonx
             if (index > 0) {
                 debug('  %s', line);
@@ -53,13 +53,13 @@ function debugError(err, debug) {
 exports.debugError = debugError;
 ;
 function removeDashElementToCamelCase(str) {
-    const pieces = (0, lodash_1.split)(str, '-');
+    const pieces = lodash_1.split(str, '-');
     if (pieces.length <= 1) {
         return str;
     }
     let result = pieces[0];
     for (let index = 1; index < pieces.length; index++) {
-        result += (0, lodash_1.capitalize)(pieces[index]);
+        result += lodash_1.capitalize(pieces[index]);
     }
     return result;
 }

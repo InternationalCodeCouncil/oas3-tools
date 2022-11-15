@@ -8,14 +8,14 @@ const path = require("path");
 const serveStatic = require("serve-static");
 const swagger_ui_options_1 = require("./swagger.ui.options");
 const debug_1 = require("debug");
-const debug = (0, debug_1.default)("oas3-tools:ui");
+const debug = debug_1.default("oas3-tools:ui");
 class SwaggerUI {
     constructor(definition, options) {
         this.apiDocsCache = {};
         this.apiDocsPaths = [];
         this.definition = definition;
         // Set the defaults
-        this.options = (0, lodash_1.defaults)(options || {}, this.getDefaultOptions());
+        this.options = lodash_1.defaults(options || {}, this.getDefaultOptions());
         this.configurePaths();
     }
     serveStaticContent() {

@@ -5,7 +5,7 @@ const lodash_1 = require("lodash");
 class SwaggerParameters {
     checkParameters() {
         const concatArrays = (array, arrayToAttach) => {
-            if ((0, lodash_1.isEmpty)(arrayToAttach)) {
+            if (lodash_1.isEmpty(arrayToAttach)) {
                 return array;
             }
             return array.concat(arrayToAttach);
@@ -23,10 +23,10 @@ class SwaggerParameters {
             swaggerParameters.push(req);
             swaggerParameters.push(res);
             swaggerParameters.push(next);
-            if (!(0, lodash_1.isEmpty)(req.body)) {
+            if (!lodash_1.isEmpty(req.body)) {
                 swaggerParameters.push(req.body);
             }
-            if (!(0, lodash_1.isEmpty)(req.openapi.pathParams)) {
+            if (!lodash_1.isEmpty(req.openapi.pathParams)) {
                 Object.keys(req.openapi.pathParams).forEach(function (key) {
                     pathParams.push(req.openapi.pathParams[key]);
                 });

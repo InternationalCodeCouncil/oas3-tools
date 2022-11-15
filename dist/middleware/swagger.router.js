@@ -6,31 +6,31 @@ const fs = require("fs");
 const helpers_1 = require("./helpers");
 const path = require("path");
 const debug_1 = require("debug");
-const debug = (0, debug_1.default)("oas3-tools:routing");
+const debug = debug_1.default("oas3-tools:routing");
 class SwaggerRouter {
     handlerCacheFromDir(dirOrDirs) {
         const handlerCache = {};
         const jsFileRegex = /\.(coffee|js|ts)$/;
         var dirs = new Array();
-        if ((0, lodash_1.isArray)(dirOrDirs)) {
+        if (lodash_1.isArray(dirOrDirs)) {
             dirs = dirOrDirs;
         }
         else {
             dirs.push(dirOrDirs);
         }
         debug('  Controllers:');
-        (0, lodash_1.each)(dirs, function (dir) {
-            (0, lodash_1.each)(fs.readdirSync(dir), function (file) {
+        lodash_1.each(dirs, function (dir) {
+            lodash_1.each(fs.readdirSync(dir), function (file) {
                 const controllerName = file.replace(jsFileRegex, '');
                 let controller;
                 if (file.match(jsFileRegex) && file.indexOf(".test.js") === -1) {
                     controller = require(path.resolve(path.join(dir, controllerName)));
-                    debug('    %s%s:', path.resolve(path.join(dir, file)), ((0, lodash_1.isPlainObject)(controller) ? '' : ' (not an object, skipped)'));
-                    if ((0, lodash_1.isPlainObject)(controller)) {
-                        (0, lodash_1.each)(controller, function (value, name) {
+                    debug('    %s%s:', path.resolve(path.join(dir, file)), (lodash_1.isPlainObject(controller) ? '' : ' (not an object, skipped)'));
+                    if (lodash_1.isPlainObject(controller)) {
+                        lodash_1.each(controller, function (value, name) {
                             let handlerId = controllerName + '_' + name;
-                            debug('      %s%s', handlerId, ((0, lodash_1.isFunction)(value) ? '' : ' (not a function, skipped)'));
-                            if ((0, lodash_1.isFunction)(value) && !handlerCache[handlerId]) {
+                            debug('      %s%s', handlerId, (lodash_1.isFunction(value) ? '' : ' (not a function, skipped)'));
+                            if (lodash_1.isFunction(value) && !handlerCache[handlerId]) {
                                 handlerCache[handlerId] = value;
                             }
                         });
@@ -44,16 +44,16 @@ class SwaggerRouter {
         var handlerCache = {};
         debug('Initializing swagger-router middleware');
         // Set the defaults
-        options = (0, lodash_1.defaults)(options || {}, {
+        options = lodash_1.defaults(options || {}, {
             controllers: {},
             useStubs: false // not for now.
         });
         console.log('  Mock mode: %s', options.useStubs === true ? 'enabled' : 'disabled');
-        if ((0, lodash_1.isPlainObject)(options.controllers)) {
+        if (lodash_1.isPlainObject(options.controllers)) {
             // Create the handler cache from the passed in controllers object
-            (0, lodash_1.each)(options.controllers, function (func, handlerName) {
+            lodash_1.each(options.controllers, function (func, handlerName) {
                 console.log('    %s', handlerName);
-                if (!(0, lodash_1.isFunction)(func)) {
+                if (!lodash_1.isFunction(func)) {
                     throw new Error('options.controllers values must be functions');
                 }
             });
@@ -66,11 +66,11 @@ class SwaggerRouter {
         const getHandlerName = (req) => {
             if (req.openapi.schema['x-swagger-router-controller']) {
                 let operationId = req.openapi.schema.operationId ? req.openapi.schema.operationId : req.method.toLowerCase();
-                operationId = (0, helpers_1.removeDashElementToCamelCase)(operationId);
+                operationId = helpers_1.removeDashElementToCamelCase(operationId);
                 return req.openapi.schema['x-swagger-router-controller'] + '_' + operationId;
             }
             else {
-                return (0, helpers_1.removeDashElementToCamelCase)(req.openapi.schema.operationId);
+                return helpers_1.removeDashElementToCamelCase(req.openapi.schema.operationId);
             }
         };
         const send405 = (req, res, next) => {
@@ -84,17 +84,17 @@ class SwaggerRouter {
             let handlerName;
             let rErr;
             debug('%s %s', req.method, req.url);
-            debug('  Will process: %s', (0, lodash_1.isUndefined)(operation) ? 'no' : 'yes');
+            debug('  Will process: %s', lodash_1.isUndefined(operation) ? 'no' : 'yes');
             if (operation) {
                 handlerName = getHandlerName(req);
                 handler = handlerCache[handlerName];
                 debug('  Route handler: %s', handlerName);
-                debug('    Missing: %s', (0, lodash_1.isUndefined)(handler) ? 'yes' : 'no');
+                debug('    Missing: %s', lodash_1.isUndefined(handler) ? 'yes' : 'no');
                 debug('    Ignored: %s', options.ignoreMissingHandlers === true ? 'yes' : 'no');
-                if ((0, lodash_1.isUndefined)(handler)) {
+                if (lodash_1.isUndefined(handler)) {
                     return send405(req, res, next);
                 }
-                if (!(0, lodash_1.isUndefined)(handler)) {
+                if (!lodash_1.isUndefined(handler)) {
                     try {
                         return handler.apply(this, req.openapi.swaggerParameters);
                     }
@@ -113,7 +113,7 @@ class SwaggerRouter {
                 return send405(req, res, next);
             }
             if (rErr) {
-                (0, helpers_1.debugError)(rErr, debug);
+                helpers_1.debugError(rErr, debug);
             }
             return next(rErr);
         };
