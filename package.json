@@ -37,7 +37,7 @@
     "cors": "^2.8.5",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "express-openapi-validator": "^4.4.3",
+    "express-openapi-validator": "^4.13.8",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
